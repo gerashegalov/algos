@@ -17,9 +17,9 @@ public class Fibonacci {
   public int get(int n) {
     final int[] rc = new int[] {0, 1};
     for (int i = 2; i <= n; i++) {
-      rc[i % 2] = rc[0] + rc[1];
+      rc[i & ~(~0 << 1)] = rc[0] + rc[1];
     }
-    return rc[n % 2];
+    return rc[n & ~(~0 << 1)];
   }
 
   public static void main(String[] args) {
