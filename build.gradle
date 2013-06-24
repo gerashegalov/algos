@@ -1,0 +1,9 @@
+apply plugin: "java"
+
+group = "algos"
+version = "1.0-SNAPSHOT"
+
+task(runRadixSort, dependsOn: 'classes', type: JavaExec) {
+  main = 'RadixSort'
+  classpath = sourceSets.main.runtimeClasspath
+}
