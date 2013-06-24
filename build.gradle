@@ -7,3 +7,8 @@ task(runRadixSort, dependsOn: 'classes', type: JavaExec) {
   main = 'RadixSort'
   classpath = sourceSets.main.runtimeClasspath
 }
+task(runFibonacci, dependsOn: 'classes', type: JavaExec) {
+  main = 'Fibonacci'
+  jvmArgs = [ '-ea' ]
+  classpath = sourceSets.main.runtimeClasspath
+}
