@@ -8,6 +8,6 @@ Random collection of algorithms.
 To Build
 --------
 
-gradle build
-gradle runRadixSort
-gradle runFibonacci
+1. gradle build
+2. gradle runRadixSort
+3. gradle runFibonacci
