@@ -1,4 +1,5 @@
 apply plugin: "java"
+apply plugin: "cpp-exe"
 
 group = "algos"
 version = "1.0-SNAPSHOT"
@@ -12,3 +13,15 @@ task(runFibonacci, dependsOn: 'classes', type: JavaExec) {
   jvmArgs = [ '-ea' ]
   classpath = sourceSets.main.runtimeClasspath
 }
+
+executables {
+  main {
+    spec {
+      args "-ggdb", "-std=c++98", "-pedantic"
+    }
+  }
+}
+task(runNativeRadixSort, dependsOn: 'compileMain', type: Exec) {
+  commandLine './build/binaries/algos'
+}
+
