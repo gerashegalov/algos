@@ -6,7 +6,7 @@
 
 using namespace std;
 
-static const uint32_t MAX_RANDOM = 1000;
+static const uint32_t MAX_RANDOM = 10000;
 static const bool VERIFY = true;
 
 static inline uint32_t clz(uint32_t i) {
@@ -15,7 +15,7 @@ static inline uint32_t clz(uint32_t i) {
   }
   uint32_t r = 0;
   if (!(i & 0xFFFF0000)) {
-    r +=16;
+    r += 16;
     i <<= 16;
   }
   if (!(i & 0xFF000000)) {
@@ -28,7 +28,7 @@ static inline uint32_t clz(uint32_t i) {
   }
   if (!(i & 0xC0000000)) {
     r += 2;
-    i <<=2;
+    i <<= 2;
   }
   if (!(i & 0x80000000)) {
     r += 1;
@@ -58,11 +58,36 @@ void sort(vector<uint32_t> &v, uint32_t bitWidth) {
     for (vector<uint32_t>::size_type i = 1; i < c.size(); i++) {
       c[i] += c[i - 1];
     }
-    for (vector<uint32_t>::size_type i = v.size() - 1; i != (vector<uint32_t>::size_type)~0; i--) {
+    for (vector<uint32_t>::size_type i = v.size() - 1;
+         i != (vector<uint32_t>::size_type)~0;
+         i--)
+    {
       b[--c[(v[i] >> e) & remMask]] = v[i];
     }
     v = b;
   }
+}
+
+static vector<uint32_t>::size_type binSearchR(
+  vector<uint32_t> v,
+  vector<uint32_t>::size_type s,
+  vector<uint32_t>::size_type e,
+  uint32_t k)
+{
+  if (s > e) {
+    return -1;
+  }
+  vector<uint32_t>::size_type m = (s + e) >> 1;
+  if (k < v[m]) {
+    return binSearchR(v, s, m - 1, k);
+  } else if (k > v[m]) {
+    return binSearchR(v, m + 1, e, k);
+  }
+  return m;
+}
+
+vector<uint32_t>::size_type binSearch(vector<uint32_t> v, uint32_t k) {
+  return binSearchR(v, 0, v.size(), k);
 }
 
 static void genv(vector<uint32_t> &v) {
@@ -102,4 +127,12 @@ int main(int argc, char *argv[]) {
       cout << "SUCCESS: RadixSort finished and verified" << endl;
     }
   }
+
+  // Test 1: existing key is findable
+  vector<uint32_t>::size_type randPos = rand() % v.size();
+  uint32_t randKey = v[randPos];
+  uint32_t foundPos = binSearch(v, randKey);
+  assert (v[foundPos] == randKey);
+  cout << "SUCCESS: binSearch " << randKey << " at " << foundPos;
+  cout << ", randPos=" << randPos << endl;
 }
