@@ -1,5 +1,6 @@
 #include <assert.h>
 #include <iostream>
+#include <limits.h>
 #include <stdint.h>
 #include <stdlib.h>
 #include <vector>
@@ -11,7 +12,7 @@ static const bool VERIFY = true;
 
 static inline uint32_t clz(uint32_t i) {
   if (i == 0) {
-    return sizeof(i);
+    return sizeof(i) * CHAR_BIT;
   }
   uint32_t r = 0;
   if (!(i & 0xFFFF0000)) {
