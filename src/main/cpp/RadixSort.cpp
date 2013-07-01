@@ -70,14 +70,19 @@ void sort(vector<uint32_t> &v, uint32_t bitWidth) {
 }
 
 static vector<uint32_t>::size_type binSearchR(
-  vector<uint32_t> v,
+  vector<uint32_t> &v,
   vector<uint32_t>::size_type s,
   vector<uint32_t>::size_type e,
   uint32_t k)
 {
-  if (s > e) {
-    return -1;
+  // check argument validity
+  if (s > e
+   || s >= v.max_size()
+   || e >> v.max_size())
+  {
+    return v.max_size();
   }
+
   vector<uint32_t>::size_type m = (s + e) >> 1;
   if (k < v[m]) {
     return binSearchR(v, s, m - 1, k);
@@ -87,13 +92,13 @@ static vector<uint32_t>::size_type binSearchR(
   return m;
 }
 
-vector<uint32_t>::size_type binSearch(vector<uint32_t> v, uint32_t k) {
+vector<uint32_t>::size_type searchKey(vector<uint32_t> &v, uint32_t k) {
   return binSearchR(v, 0, v.size(), k);
 }
 
 static void genv(vector<uint32_t> &v) {
   for (vector<uint32_t>::iterator it = v.begin(); it != v.end(); it++) {
-    *it = rand() % MAX_RANDOM;
+    *it = 1 + rand() % MAX_RANDOM;
   }
 }
 
@@ -132,8 +137,27 @@ int main(int argc, char *argv[]) {
   // Test 1: existing key is findable
   vector<uint32_t>::size_type randPos = rand() % v.size();
   uint32_t randKey = v[randPos];
-  uint32_t foundPos = binSearch(v, randKey);
+  uint32_t foundPos = searchKey(v, randKey);
   assert (v[foundPos] == randKey);
   cout << "SUCCESS: binSearch " << randKey << " at " << foundPos;
   cout << ", randPos=" << randPos << endl;
+
+  // Test 2: fail to find outside the value range
+  assert (searchKey(v, MAX_RANDOM + 1) == v.max_size());
+  cout << "SUCCESS: binSearch not found " << MAX_RANDOM << endl;
+  assert (searchKey(v, 0) == v.max_size());
+  cout << "SUCCESS: binSearch not found " << 0 << endl;
+
+  // Test 2: fail to find non-existing key withing the range
+  uint32_t nek = 0; // non-existing key
+  for (vector<uint32_t>::size_type i = 1; i < v.size(); i++) {
+    if (v[i] - v[i - 1] > 1) {
+      nek = v[i] - 1;
+      break;
+    }
+  }
+  if (nek > 0) {
+    assert (searchKey(v, nek) == v.max_size());
+    cout << "SUCCESS: binSearch not found " << nek << endl;
+  }
 }
