@@ -6,7 +6,7 @@ public class RadixSort {
   private static final Random rand = new Random();
   private static final boolean VERIFY = Boolean.getBoolean("verify");
   private static final int MAX_INT = Integer.getInteger("maxint", 100);
- 
+
   private static void gen(int[] a) {
     for (int i = 0; i < a.length; i++) {
       a[i] = rand.nextInt(MAX_INT);
@@ -30,11 +30,11 @@ public class RadixSort {
     }
     final int hb = Integer.SIZE - Integer.numberOfLeadingZeros(max);
 
-    for (int e = 0; e <= hb; e += binWidth) {
+    for (int e = 0; e < hb; e += binWidth) {
       // zero count array from previous iter
-      Arrays.fill(c, 0);               
- 
-      // count sort based on current radix 
+      Arrays.fill(c, 0);
+
+      // count sort based on current radix
       //
       for (int i = 0; i < a.length; i++) {
         c[(a[i] >> e) & remainderMask]++;
@@ -49,7 +49,7 @@ public class RadixSort {
       System.arraycopy(b, 0, a, 0, a.length);
     }
   }
-  
+
   private static void print(String header, int[] a) {
     System.out.println("######## " + header);
     System.out.println(Arrays.toString(a));
@@ -77,8 +77,8 @@ public class RadixSort {
         if (VERIFY) {
           if (!Arrays.equals(arrRef, arr)) {
             print("Generated", arrPreSort);
-            print("Reference Arrays.sort", arrRef); 
-            print("Radix.sort", arr); 
+            print("Reference Arrays.sort", arrRef);
+            print("Radix.sort", arr);
             throw new RuntimeException("Radix broken");
           }
         }

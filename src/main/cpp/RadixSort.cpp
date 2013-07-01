@@ -45,13 +45,13 @@ void sort(vector<uint32_t> &v, uint32_t bitWidth) {
       max = *it;
     }
   }
-  const uint32_t hb = clz(max);
+  const uint32_t hb = sizeof(max) * CHAR_BIT - clz(max);
   vector<uint32_t> c(1 << bitWidth); // count array
   vector<uint32_t> b(v.size());
 
   // count sort based on radix
   //
-  for (uint32_t e = 0; e <= hb; e += bitWidth) {
+  for (uint32_t e = 0; e < hb; e += bitWidth) {
     fill(c.begin(), c.end(), 0); // zero counts
     for (vector<uint32_t>::size_type i = 0; i < v.size(); i++) {
       c[(v[i] >> e) & remMask]++;
@@ -148,7 +148,7 @@ int main(int argc, char *argv[]) {
   assert (searchKey(v, 0) == v.max_size());
   cout << "SUCCESS: binSearch not found " << 0 << endl;
 
-  // Test 2: fail to find non-existing key withing the range
+  // Test 3: fail to find non-existing key withing the range
   uint32_t nek = 0; // non-existing key
   for (vector<uint32_t>::size_type i = 1; i < v.size(); i++) {
     if (v[i] - v[i - 1] > 1) {
