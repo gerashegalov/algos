@@ -78,7 +78,7 @@ static vector<uint32_t>::size_type binSearchR(
   // check argument validity
   if (s > e
    || s >= v.max_size()
-   || e >> v.max_size())
+   || e >= v.max_size())
   {
     return v.max_size();
   }
